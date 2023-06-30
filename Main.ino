@@ -1,51 +1,43 @@
-const int botaoJogador1 = 6;
-const int botaoJogador2 = 7;
-const int ledJogador1 = 8;
-const int ledJogador2 = 9;
+int Botao1 = 6;
+int Botao2 = 7;
+int BotaoPause = 8;
+int Led1 = 9;
+int Led2 = 10;
+bool Trava = false;
 
-bool jogador1Pressionado = false;
-bool jogador2Pressionado = false;
-
-void setup() {
-  pinMode(botaoJogador1, INPUT_l);
-  pinMode(botaoJogador2, INPUT);
-  pinMode(ledJogador1, OUTPUT);
-  pinMode(ledJogador2, OUTPUT);
-
-  randomSeed(analogRead(0));
+void setup(){
+  pinMode(Botao1, INPUT);
+  pinMode(Botao2, INPUT);
+  pinMode(BotaoPause, INPUT);
+  pinMode(Led1, OUTPUT);
+  pinMode(Led2, OUTPUT);
+  Serial.begin(9600);
 }
+void loop(){
+  int I1 = digitalRead(Botao1);
+  int I2 = digitalRead(Botao2);
+  int I3 = digitalRead(BotaoPause);
 
-void loop() {
-    jogador1Pressionado = false;
-    jogador2Pressionado = false;
-   digitalWrite(ledJogador1, LOW);
-   digitalWrite(ledJogador2, LOW);
-
-  if (digitalRead(botaoJogador1) == HIGH && !jogador2Pressionado) {
-    jogador1Pressionado = true;
-  }
-
-  if (digitalRead(botaoJogador2) == HIGH && !jogador1Pressionado) {
-    jogador2Pressionado = true;
-  }
-
-  if (jogador1Pressionado && jogador2Pressionado) {
-    jogador1Pressionado = false;
-    jogador2Pressionado = false;
-
-    int numeroAleatorio = random(1, 3); 
-
-    if (numeroAleatorio == 1) {
-       jogador1Pressionado = true;
-    } else {
-      jogador2Pressionado = true;
+  if(Trava == false){
+    if(I1 == 1){
+      digitalWrite(Led1, HIGH);
+      Trava = true;
+      Serial.println("1");
     }
+    if(I2 == 1){
+      digitalWrite(Led2, HIGH);
+      Trava = true;
+      Serial.println("2");
+    }   
+    
+  }else{
+    if((I3 == 1)&&(Trava == true)){
+      digitalWrite(Led1, LOW);
+      digitalWrite(Led2, LOW);
+      Trava = false;
+      Serial.println("Resetado!");
+    }   
   }
-If(jogador1Pressionado == true){
-   digitalWrite(ledJogador1, HIGH);
 }
-If(jogador2Pressionado == true){
-   digitalWrite(ledJogador2, HIGH);
-}
-delay(10000);
-}
+
+
